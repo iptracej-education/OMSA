@@ -5,7 +5,8 @@ https://pe.gatech.edu/degrees/analytics
 
 - ISYE 6501: Intro to Analytics Modeling
 - CSE 6040: Computing for Data Analysis
-- More to come after taking classes... 
+  <p></p>
+(More to come after taking classes...) 
 
 
 

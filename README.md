@@ -26,8 +26,8 @@ https://pe.gatech.edu/degrees/analytics
 - ISYE 6739: Probability and Statistics
 
   Other institutions 
-- Imperial College London - Mathmatics for Machine Learning 
-- Deeplearning.ai - Calculus for Machine Learning and Data Science 
+- Imperial College London - Mathmatics for Machine Learning (coursera) 
+- Deeplearning.ai - Calculus for Machine Learning and Data Science (coursera) 
 
 ## Books
 - [Mathematics for Mahine Learning](https://mml-book.github.io/)

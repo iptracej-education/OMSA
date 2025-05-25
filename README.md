@@ -31,7 +31,7 @@ https://pe.gatech.edu/degrees/analytics
 - Deeplearning.ai - Calculus for Machine Learning and Data Science (coursera) 
 
 ## Self-Studies
-- Harvard CS197: AI Research Experiences 
+- Harvard CS197: AI Research Experiences https://www.cs197.seas.harvard.edu/
 
 ## Books I like
 - [Book of Proof](https://richardhammack.github.io/BookOfProof/)

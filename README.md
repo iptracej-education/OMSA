@@ -30,7 +30,12 @@ https://pe.gatech.edu/degrees/analytics
 - Imperial College London - Mathmatics for Machine Learning (coursera) 
 - Deeplearning.ai - Calculus for Machine Learning and Data Science (coursera) 
 
-## Books
+## Self-Studies
+- Harvard CS197: AI Research Experiences 
+
+## Books I like
+- [Book of Proof](https://richardhammack.github.io/BookOfProof/)
+- [LINEAR ALGEBRA with Applications by W.Keith Nicholson](https://open.umn.edu/opentextbooks/textbooks/533)
 - [Mathematics for Mahine Learning](https://mml-book.github.io/)
 - [An Introduction to Statistical Learning](https://www.statlearning.com/)
 - [The Elements of Statistical Learning](https://hastie.su.domains/Papers/ESLII.pdf)

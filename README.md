@@ -4,12 +4,12 @@ https://pe.gatech.edu/degrees/analytics
 
 ## Classes completed
 https://pe.gatech.edu/degrees/analytics 
-- ISYE 6501: Intro to Analytics Modeling
-- CSE 6040: Computing for Data Analysis
-- ISYE 6420: Bayesian Statistics
+- [ISYE 6501: Intro to Analytics Modeling](https://omscs.gatech.edu/isye-6501-intro-analytics-modeling)
+- [CSE 6040: Computing for Data Analysis](https://cse6040.gatech.edu/active/)
+- [ISYE 6420: Bayesian Statistics](https://omscs.gatech.edu/isye-6420-bayesian-statistics)
   
 ## Classes planned
-- CSE 6242: Data and Visual Analytics
+- [CSE 6242: Data and Visual Analytics](https://omscs.gatech.edu/cse-6242-data-and-visual-analytics)
 - ISYE 6740 Computational Data Analytics
 - CS 6601: Artifical Intelligence
 - CS 7643: Deep Learning

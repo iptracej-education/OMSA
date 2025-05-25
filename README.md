@@ -16,11 +16,11 @@ https://pe.gatech.edu/degrees/analytics
 - CSE 8803: Applied Natural Language Processing
 - CS 7280: Nework Science (Graph) 
 
-## Programming 
+## Pre-requisite Programming completed
 - CS 1332: Data Structure and Algorithm
 - CS 1331: Introduction to Object-Oriented Programming 
 
-## Mathematics
+## Pre-requisite Mathematics completed
 - Math 1554: Linear algebra
 - Math 1712: Calculus
 - ISYE 6739: Probability and Statistics

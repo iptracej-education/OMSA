@@ -6,8 +6,8 @@ https://pe.gatech.edu/degrees/analytics
 https://pe.gatech.edu/degrees/analytics 
 - ISYE 6501: Intro to Analytics Modeling
 - CSE 6040: Computing for Data Analysis
-- ISYE 6420: Bayesian Statistics 
-  <p></p>
+- ISYE 6420: Bayesian Statistics
+  
 ## Classes planned
 - CSE 6242: Data and Visual Analytics
 - ISYE 6740 Computational Data Analytics

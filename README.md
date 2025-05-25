@@ -26,7 +26,7 @@ https://pe.gatech.edu/degrees/analytics
 - Math 1712: Calculus
 - ISYE 6739: Probability and Statistics
 
-  Other institutions 
+  *Other institutions*  
 - Imperial College London - Mathmatics for Machine Learning (coursera) 
 - Deeplearning.ai - Calculus for Machine Learning and Data Science (coursera) 
 

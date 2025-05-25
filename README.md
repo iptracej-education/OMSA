@@ -10,28 +10,24 @@ https://pe.gatech.edu/degrees/analytics
   
 ## Classes planned
 - [CSE 6242: Data and Visual Analytics](https://omscs.gatech.edu/cse-6242-data-and-visual-analytics)
-- ISYE 6740 Computational Data Analytics
-- CS 6601: Artifical Intelligence
-- CS 7643: Deep Learning
-- CS 6742: Reinforcement Learning
-- CSE 8803: Applied Natural Language Processing
-- CS 7280: Nework Science (Graph) 
+- [ISYE 6740 Computational Data Analytics](https://www2.isye.gatech.edu/~yxie77/ISyE6740-2025Spring-Xie-Syllabus)
+- [CS 6601: Artifical Intelligence](https://omscs.gatech.edu/cs-6601-artificial-intelligence) 
+- [CS 7643: Deep Learning](https://omscs.gatech.edu/cs-7643-deep-learning) 
+- [CS 6742: Reinforcement Learning](https://omscs.gatech.edu/cs-7642-reinforcement-learning) 
+- [CSE 8803: Applied Natural Language Processing](https://omscs.gatech.edu/cs-7650-natural-language-processing)
+- [CS 7280: Nework Science (Graph)](https://omscs.gatech.edu/cs-7280-network-science)  
 
-## Pre-requisite Programming completed
-- CS 1332: Data Structure and Algorithm
-- CS 1331: Introduction to Object-Oriented Programming 
-
-## Pre-requisite Mathematics completed
-- Math 1554: Linear algebra
-- Math 1712: Calculus
-- ISYE 6739: Probability and Statistics
-
-  *Other institutions*  
-- Imperial College London - Mathmatics for Machine Learning (coursera) 
-- Deeplearning.ai - Calculus for Machine Learning and Data Science (coursera) 
+## Pre-requisites
+- [CS 1332: Data Structure and Algorithm](https://www.edx.org/certificates/professional-certificate/gtx-data-structures-and-algorithms) 
+- [CS 1331: Introduction to Object-Oriented Programming](https://www.edx.org/certificates/professional-certificate/gtx-introduction-to-object-oriented-programming-with-java)  
+- [Math 1554: Linear algebra](https://math.gatech.edu/courses/math/1554)
+- [Math 1712: Calculus](https://math.gatech.edu/courses/math/1712) 
+- [ISYE 6739: Probability and Statistics](https://www2.isye.gatech.edu/~sman/courses/6739/) 
 
 ## Self-Studies
-- Harvard CS197: AI Research Experiences https://www.cs197.seas.harvard.edu/
+- [Harvard CS197: AI Research Experiences](https://www.cs197.seas.harvard.edu/)
+- [Imperial College London - Mathmatics for Machine Learning (coursera)](https://www.coursera.org/specializations/mathematics-machine-learning) 
+- [Deeplearning.ai - Calculus for Machine Learning and Data Science (coursera)](https://www.deeplearning.ai/courses/mathematics-for-machine-learning-and-data-science-specialization/)
 
 ## Books I like
 - [Book of Proof](https://richardhammack.github.io/BookOfProof/)

@@ -26,8 +26,6 @@ https://pe.gatech.edu/degrees/analytics
 
 ## Self-Studies
 - [Harvard CS197: AI Research Experiences](https://www.cs197.seas.harvard.edu/)
-- [Imperial College London - Mathmatics for Machine Learning (coursera)](https://www.coursera.org/specializations/mathematics-machine-learning) 
-- [Deeplearning.ai - Calculus for Machine Learning and Data Science (coursera)](https://www.deeplearning.ai/courses/mathematics-for-machine-learning-and-data-science-specialization/)
 
 ## Books I like
 - [Book of Proof](https://richardhammack.github.io/BookOfProof/)

@@ -33,3 +33,4 @@ https://pe.gatech.edu/degrees/analytics
 - [Mathematics for Mahine Learning](https://mml-book.github.io/)
 - [An Introduction to Statistical Learning](https://www.statlearning.com/)
 - [The Elements of Statistical Learning](https://hastie.su.domains/Papers/ESLII.pdf)
+- [Artificial Intelligence: A Modern Approach, 4th US ed.](https://aima.cs.berkeley.edu/)

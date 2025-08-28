@@ -8,6 +8,7 @@ https://pe.gatech.edu/degrees/analytics
 - [CSE 6040: Computing for Data Analysis](https://cse6040.gatech.edu/active/)
 - [ISYE 6420: Bayesian Statistics](https://omscs.gatech.edu/isye-6420-bayesian-statistics)
 - [CSE 6242: Data and Visual Analytics](https://omscs.gatech.edu/cse-6242-data-and-visual-analytics)
+- [CS 6601: Artifical Intelligence](https://omscs.gatech.edu/cs-6601-artificial-intelligence)
   
 ## Classes planned
 - [ISYE 6740 Computational Data Analytics](https://www2.isye.gatech.edu/~yxie77/ISyE6740-2025Spring-Xie-Syllabus)

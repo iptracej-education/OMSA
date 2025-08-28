@@ -12,7 +12,6 @@ https://pe.gatech.edu/degrees/analytics
   
 ## Classes planned
 - [ISYE 6740 Computational Data Analytics](https://www2.isye.gatech.edu/~yxie77/ISyE6740-2025Spring-Xie-Syllabus)
-- [CS 6601: Artifical Intelligence](https://omscs.gatech.edu/cs-6601-artificial-intelligence) 
 - [CS 7643: Deep Learning](https://omscs.gatech.edu/cs-7643-deep-learning) 
 - [CS 6742: Reinforcement Learning](https://omscs.gatech.edu/cs-7642-reinforcement-learning) 
 - [CSE 8803: Applied Natural Language Processing](https://omscs.gatech.edu/cs-7650-natural-language-processing)

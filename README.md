@@ -7,8 +7,11 @@ https://pe.gatech.edu/degrees/analytics
 
 Graph-Augmented Neuro-Symbolic Vulnerability Detection in Linux Kernels
 
-- Have architected and developed a closed-loop security agent.
-- Not just train a model, but built a Graph-RAG system that retrieves context, generates hypotheses using a fine-tuned 72B model, and validates them using formal methods. It achieved 95% precision on the test set, eliminating the hallucination problem common in standard LLMs.
+- Have architected and developed a closed-loop security agent by integrating the several project together (described in detail at a later section)
+ -  Brain (Deep Learning Model) - Provide the Fine-Tuned LLM models (optimized with QLoRA and other techniques)
+ -  Memory/database (Knowledge Management) - Leveraged a Knowledge Graph to solve the "Context" problem. Instead of pasting the whole file, Our system retrieves the dependency graph via RAG (Retrieval Augmented Generation).
+ -  The Translator (Natural Language Processing) - Built the Data Pipeline that cleans unstructured C-code and tokenizes it correctly, handling the specific "dialects" of kernel code.
+ -  The Judge (Reinforcement Learning): Implement the Verification Loop. The LLM proposes a bug, and the Static Analyzer (Coccinelle) rewards/punishes it. This proves you understand Safety & Alignment
 
 ## The PhD Extension: "The Autonomous Architect" 
 

@@ -2,7 +2,7 @@
 Master of Science in Analytics at Georgia Tech with the same faculty and curriculum for the online master's as the on-campus program. 
 https://pe.gatech.edu/degrees/analytics 
 
-Given 25 years of Security industry experience, the goal of this program is to effectively build a CTO-level understanding of the AI stack for security domain. 
+Given 25 years of experience in the security industry, my goal in the OMSA program is to build a CTO-level understanding of the modern AI stack—how to apply AI/ML/LLMs to real security problems, and how to evaluate and mitigate the security risks introduced by these systems. 
 
 ## MS Thesis
 **The Neuro-Symbolic Auditor**

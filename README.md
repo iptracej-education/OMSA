@@ -2,6 +2,8 @@
 Master of Science in Analytics at Georgia Tech with the same faculty and curriculum for the online master's as the on-campus program. 
 https://pe.gatech.edu/degrees/analytics 
 
+Given 25 years of Security industry experience, the goal of this program is to effectively build a CTO-level understanding of the AI stack for security domain. 
+
 ## MS Thesis
 **The Neuro-Symbolic Auditor**
 

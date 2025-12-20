@@ -3,7 +3,8 @@ Master of Science in Analytics at Georgia Tech with the same faculty and curricu
 https://pe.gatech.edu/degrees/analytics 
 
 ## MS Thesis
-The MS Thesis: "The Neuro-Symbolic Auditor
+**The MS Thesis: "The Neuro-Symbolic Auditor**
+
 Graph-Augmented Neuro-Symbolic Vulnerability Detection in Linux KernelsGraph-Augmented Neuro-Symbolic Vulnerability Detection in Linux Kernels
 
 Have architected a closed-loop security agent. I didn't just train a model; I built a Graph-RAG system that retrieves context, generates hypotheses using a fine-tuned 72B model, and validates them using formal methods. It achieved 95% precision on the test set, eliminating the hallucination problem common in standard LLMs."

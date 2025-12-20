@@ -22,37 +22,30 @@ Theme: Evolution & Discovery Goal: Move from "Checking known bugs" to "Discoveri
 ## Projects
 
 ### Deep Learning (DL)
-
-Focus: The Engine (The Model itself).
-Project Title: "Fine-Tuning Large Language Models with QLoRA for Low-Resource Hardware."
-Goal: Focus on the training dynamics. Experiment with learning rates, rank (r=8 vs r=64), and loss curves.
-Management Takeaway: leart to estimate compute costs ("How many H100s do we need?") and debug training instability (Loss spikes).
+- Focus: The Engine (The Model itself).
+- Project Title: "Fine-Tuning Large Language Models with QLoRA for Low-Resource Hardware."
+- Goal: Focus on the training dynamics. Experiment with learning rates, rank (r=8 vs r=64), and loss curves.
+- Management Takeaway: leart to estimate compute costs ("How many H100s do we need?") and debug training instability (Loss spikes).
 
 #### Natural Language Processing (NLP)
-
-Focus: The Data (The Input/Output).
-Project Title: "Constructing a Privacy-Aware Chain-of-Thought Dataset from Unstructured Git Logs."
-- Experiment with Tokenization (handling C macros), Prompt Engineering (System Prompts), and Data Augmentation (synthetic samples).
-Goal: Solve the "Context Window" problem. Compare how different tokenizers handle C code.
-Management Takeaway: leart that "Data is the moat." You'll understand why your team needs weeks for "Data Cleaning" before they can start training.
+- Focus: The Data (The Input/Output).
+- Project Title: "Constructing a Privacy-Aware Chain-of-Thought Dataset from Unstructured Git Logs." Experiment with Tokenization (handling C macros), Prompt Engineering (System Prompts), and Data Augmentation (synthetic samples).
+- Goal: Solve the "Context Window" problem. Compare how different tokenizers handle C code.
+- Management Takeaway: leart that "Data is the moat." You'll understand why your team needs weeks for "Data Cleaning" before they can start training.
 
 ### Reinforcement Learning (RL)
 
-Focus: The Alignment (The Loop).
-
-Project Title: "Direct Preference Optimization (DPO) for Aligning LLMs with Static Analysis Verifiers."
-Use the Static Validator (Coccinelle) as the "Reward Function."
-Train the model to prefer the "Verified" trace over the "Hallucinated" trace.
-Goal: Implement the "Feedback Loop."
-Management Takeaway: leart about Safety & Alignment. You'll understand how to stop your AI from being "confidently wrong" or generating malware.
+- Focus: The Alignment (The Loop).
+- Project Title: "Direct Preference Optimization (DPO) for Aligning LLMs with Static Analysis Verifiers." Used the Static Validator (Coccinelle) as the "Reward Function, and trained the model to prefer the "Verified" trace over the "Hallucinated" trace.
+- Goal: Implement the "Feedback Loop."
+- Management Takeaway: leart about Safety & Alignment. You'll understand how to stop your AI from being "confidently wrong" or generating malware.
 
 ### Knowledge Graphs (KG)
-Focus: The Memory (The Context).
-Project Title: "Modeling Linux Kernel Dependencies as a Neuro-Symbolic Knowledge Graph."
-- Instead of feeding the LLM raw text, you feed it a Graph: (Driver A) --[calls]--> (Function B) --[requires]--> (Lock C).
-- Use a Graph Neural Network (GNN) or RAG (Retrieval Augmented Generation) to retrieve the correct context for the LLM.
-Goal: Solve the "Hallucination" problem by grounding the AI in a structured graph of kernel APIs.
-Management Takeaway: learnt about Retrieval Systems (RAG).
+
+- Focus: The Memory (The Context).
+- Project Title: "Modeling Linux Kernel Dependencies as a Neuro-Symbolic Knowledge Graph." Instead of feeding the LLM raw text, you feed it a Graph: (Driver A) --[calls]--> (Function B) --[requires]--> (Lock C). Use a Graph Neural Network (GNN) or RAG (Retrieval Augmented Generation) to retrieve the correct context for the LLM.
+- Goal: Solve the "Hallucination" problem by grounding the AI in a structured graph of kernel APIs.
+- Management Takeaway: learnt about Retrieval Systems (RAG).
 
 ## Classes completed
 https://pe.gatech.edu/degrees/analytics 

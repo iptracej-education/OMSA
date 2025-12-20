@@ -1,3 +1,241 @@
+# OMSA — Program Activities & Research Direction (Security + AI)
+
+## OMSA
+
+**Master of Science in Analytics (OMSA), Georgia Tech** : Online program with the same faculty and curriculum as the on-campus program.  
+Program info: https://pe.gatech.edu/degrees/analytics
+
+With 25 years of experience in the security industry, my goal in the OMSA program is to build a CTO-level understanding of the modern AI stack—how to apply AI/ML/LLMs to real security problems, and how to evaluate and mitigate the security risks introduced by these systems (hallucination, data leakage, misuse, and model vulnerabilities).
+
+---
+
+## MS Thesis
+### Working Title
+**Contract-Guided Neuro-Symbolic Auditing for Linux Kernel Drivers**  
+**Tagline:** *The Neuro-Symbolic Auditor*
+
+### Motivation
+Many kernel-driver security issues are not simple “pattern matches.” They often arise from **implicit lifecycle intent gaps** (what developers intended vs. what code actually enforces), such as:
+- resource/lifetime mismanagement (UAF-like risk, double free, leaks),
+- teardown ordering violations (race windows),
+- runtime power management misuse,
+- missing synchronization during removal paths.
+
+### Thesis Hypothesis
+**Explicit “contracts” (resource/ordering/state invariants) provide a stable interface between LLM reasoning and static analysis.**  
+An LLM can generate structured, evidence-grounded **violation witnesses**, and a deterministic static validator can confirm/reject/mark inconclusive—reducing hallucination risk and improving triage efficiency.
+
+### System Overview
+I am building a closed-loop “security auditor” by integrating four components:
+
+1) **Brain — Deep Learning Model (LLM)**  
+- Fine-tuned LLM that generates *structured hypotheses* rather than general summaries.  
+- Output format is designed to be **checkable**: evidence spans + witness path + assumptions + confidence.
+
+2) **Memory / Grounding — Retrieval & Dependency Context**  
+- Instead of pasting full driver files, the system retrieves the minimal context needed to reason:
+  - dependency/call relationships,
+  - related helper functions,
+  - relevant API usage patterns.  
+- Goal: reduce context waste and improve grounding; retrieval helps but does not eliminate errors by itself.
+
+3) **Translator — Data & Tokenization Pipeline for Kernel C “Dialects”**  
+- Builds analysis-ready examples from real kernel code:
+  - stable slicing,
+  - macro-aware preprocessing,
+  - kernel-specific tokenization handling.  
+- Ensures the “witness” output can reliably point back to concrete code spans.
+
+4) **Judge — Validator Gate (Deterministic)**  
+- Static analysis validator (e.g., Coccinelle and/or CodeQL) acts as the judge.  
+- Each LLM hypothesis is labeled:
+  - **CONFIRMED** (high confidence under validator semantics)
+  - **REJECTED**
+  - **INCONCLUSIVE** (missing configuration/macro/callee info, tool limitations)  
+- The gate shifts trust away from free-form LLM reasoning and toward verifiable evidence.
+
+### Small Architecture Diagram
+
+```
+             ┌─────────────────────────┐
+             │   Contract Spec (YAML)  │
+             │  (Acquire/Release/...)  │
+             └───────────┬─────────────┘
+                         │
+                         v
+
+┌───────────────┐     ┌───────────────────────┐     ┌──────────────────────────┐
+│  Driver Code  │ --> │  Slicer / Context     │ --> │  LLM (Untrusted Prover)  │
+│ (repo / file) │     │  Extractor (minimal)  │     │  outputs Witness JSON    │
+└───────────────┘     └───────────────────────┘     └───────────┬──────────────┘
+│
+v
+┌──────────────────────────┐
+│ Static Validator         │
+│ (Coccinelle / CodeQL)    │
+│ CONFIRMED/REJECTED/INC   │
+└───────────┬──────────────┘
+│
+(PhD extension: verifier-aligned prefs)│
+v
+┌──────────────────────────┐
+│ Preference Dataset       │
+│ (preferred vs rejected)  │
+└───────────┬──────────────┘
+│
+v
+┌────────────────────────────┐
+│ DPO/ORPO (RLAIF-style)     │
+│ Align LLM to verifiability │
+└────────────────────────────┘
+```
+Contract-guided neuro-symbolic pipeline. The LLM acts as an *untrusted hypothesis generator* producing structured violation witnesses; a static validator adjudicates results (CONFIRMED/REJECTED/INCONCLUSIVE). The PhD extension closes the loop by using validator outcomes to form preference pairs for verifier-aligned DPO/ORPO training, improving witness correctness, localization, and calibrated abstention.
+
+### Contracts in Scope (MS)
+To keep the thesis focused and measurable, I plan to implement and evaluate **two contract families**:
+
+1) **Runtime PM contract** (resource/typestate)  
+- Example: “PM must be active before certain sensitive HW accesses,” and/or “get/put balanced across exits.”
+
+2) **Quiesce-before-free contract** (ordering/concurrency)  
+- Example: “disable/synchronize IRQ (or cancel/flush work) before freeing/unregistering shared state.”
+
+### Success Criteria (MS evaluation)
+Primary success is not “finding CVEs.” It is producing a pipeline that:
+- reduces triage burden (alert reduction vs static-only),
+- improves confirmed yield (confirmed / reviewed),
+- localizes evidence well (near validated site),
+- handles uncertainty honestly (high-quality INCONCLUSIVE with explicit missing assumptions).
+
+### Outputs / Deliverables (MS)
+- A reproducible repository:
+  - `contracts/` schema + examples
+  - `pipeline/` (slice → prompt → witness JSON)
+  - `validators/` (Coccinelle/CodeQL harness)
+  - `eval/` (metrics + ablations)
+- A small benchmark suite using **public** bug-fix pairs and hard negatives (tricky but safe code), plus optional synthetic mutants filtered by validators.
+- A paper-style write-up suitable for course deliverables and thesis chapters.
+
+---
+
+## PhD Extension (Forward-looking Roadmap)
+### Working Title
+**Autonomous Evolution of Kernel Security Contracts via Contract Mining and Verifier-Aligned Training**  
+**Tagline:** *The Autonomous Architect*
+
+### Theme
+**Evolution & discovery:** move from “checking known contract families” to **discovering new contract families** and aligning model reasoning to verifiable outputs at scale.
+
+### PhD Thesis Hypothesis (extension)
+**Bug-fix commits encode latent intent.** By mining fix commits over long time spans, we can infer and maintain a taxonomy/library of implicit kernel contracts. By using validator outcomes as preference feedback, we can align LLMs to produce **verifier-confirmable witnesses** (or calibrated abstentions), improving generalization and reducing hallucinations.
+
+### Extension Components
+1) **Contract Mining (Spec discovery)**
+- Mine contracts from 10 years of git history using:
+  - fix commit heuristics (Fixes tags, stable backports, subsystem paths),
+  - patch delta features (added/removed calls, reorderings, new guards, unwind changes),
+  - clustering into contract templates.
+- Start with “resource lifecycle & ordering” contracts before expanding.
+
+2) **Verifier-aligned DPO / ORPO (RLAIF-style)**
+- Use validator outcomes to create preference pairs:
+  - Preferred: CONFIRMED witnesses and correct abstentions
+  - Dispreferred: REJECTED or hallucinated claims
+- Train the model to prefer **verifiable** reasoning and to abstain when evidence is insufficient.
+
+3) **Safe adversarial stress testing**
+- Generate constrained counterexamples / contract-violation candidates (not weaponized exploit code) to test robustness and improve generalization across variant shapes.
+
+---
+
+## Projects mapped to OMSA / course areas
+These projects are intentionally aligned so course work directly advances the thesis pipeline.
+
+### Deep Learning (DL) — The Model (Brain)
+**Project focus:** Fine-tuning LLMs (QLoRA) for structured witness generation  
+- Study training dynamics: learning rate, LoRA rank, stability, loss curves.  
+- Evaluate base vs SFT vs (optional) SFT + preference training.
+
+**Management takeaway:** estimation of compute needs, diagnosing instability, and understanding realistic tradeoffs (cost vs quality).
+
+### Natural Language Processing (NLP) — The Data (Translator)
+**Project focus:** Kernel-aware dataset construction and tokenization  
+- Build contract-conditioned prompts.  
+- Investigate tokenization issues (macros, conditional compilation).  
+- Data augmentation via safe synthetic mutants + validator filtering.
+
+**Management takeaway:** “data is the moat”—data quality dominates outcome.
+
+### Reinforcement Learning / Alignment (RL) — The Loop
+**Project focus:** DPO/ORPO alignment using verifier preference signals  
+- Train the model to prefer verified witnesses over hallucinated ones.  
+- Measure calibration and abstention quality.
+
+**Management takeaway:** safety/alignment in practice—systems that avoid being confidently wrong.
+
+### Knowledge Graphs / Networks (KG) — The Memory (Grounding)
+**Project focus:** Modeling kernel dependencies for retrieval grounding  
+- Represent dependencies (call/require/guard relationships).  
+- Use retrieval to provide minimal context slices.  
+- Optionally explore GNNs or graph-based retrieval heuristics.
+
+**Management takeaway:** retrieval systems and grounding strategies for reliable AI products.
+
+---
+
+## Coursework
+
+### Completed
+- ISYE 6501: Intro to Analytics Modeling
+- CSE 6040: Computing for Data Analysis
+- ISYE 6420: Bayesian Statistics
+- CSE 6242: Data and Visual Analytics
+- CS 6601: Artificial Intelligence
+
+### Planned
+- ISYE 6740: Computational Data Analytics
+- CS 7643: Deep Learning
+- CS 6742: Reinforcement Learning
+- CSE 8803: Applied Natural Language Processing
+- CS 7280: Network Science (Graph)
+
+---
+
+## Prerequisites and Foundations
+
+### Prerequisites
+- CS 1332: Data Structures and Algorithms
+- CS 1331: Introduction to Object-Oriented Programming
+- MATH 1554: Linear Algebra
+- MATH 1712: Calculus
+- ISYE 6739: Probability and Statistics
+
+### Self-Study
+- Harvard CS197: AI Research Experiences
+
+### Books / References
+- *Book of Proof*
+- *Linear Algebra with Applications* (W. Keith Nicholson)
+- *Mathematics for Machine Learning*
+- *An Introduction to Statistical Learning*
+- *The Elements of Statistical Learning*
+- *Artificial Intelligence: A Modern Approach (4th ed.)*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # OMSA
 Master of Science in Analytics at Georgia Tech with the same faculty and curriculum for the online master's as the on-campus program. 
 https://pe.gatech.edu/degrees/analytics 

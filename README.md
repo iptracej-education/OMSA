@@ -15,9 +15,9 @@ Graph-Augmented Neuro-Symbolic Vulnerability Detection in Linux Kernels
 Theme: Evolution & Discovery Goal: Move from "Checking known bugs" to "Discovering unknown bugs" and "Self-Healing."
 
 **Title: Autonomous Evolution of Security Contracts via Adversarial Reinforcement Learning**
-- The Leap beyond MS: From Static to Dynamic (The Mutation Engine): Instead of just training on GitHub history (Past), you use an "Attacker Model" to generate new theoretical exploits (Future) and train your Defender against them.
-- From Manual to Automatic (Contract Mining): Instead of hand-writing the "Balance Power" rule, you use Unsupervised Learning (NLP) to read 10 years of git logs and infer the rules automatically ("I notice developers always call Y after X... that must be a rule").
-- From Local to Global: You scale the Knowledge Graph from "One Driver" to the "Entire Kernel Ecosystem," tracking dependencies across subsystems.
+- The Leap beyond MS: From Static to Dynamic (The Mutation Engine): Instead of just training on GitHub history (Past), use an "Attacker Model" to generate new theoretical exploits (Future) and train your Defender against them.
+- From Manual to Automatic (Contract Mining): Instead of hand-writing the "Balance Power" rule, use Unsupervised Learning (NLP) to read 10 years of git logs and infer the rules automatically ("I notice developers always call Y after X... that must be a rule").
+- From Local to Global: Scale the Knowledge Graph from "One Driver" to the "Entire Kernel Ecosystem," tracking dependencies across subsystems.
 
 ## Projects
 

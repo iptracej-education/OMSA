@@ -236,93 +236,6 @@ Evolution & discovery: move from “checking known contract families” to **dis
 
 ## Prerequisites and Foundations
 
-### Prerequisites
-- CS 1332: Data Structures and Algorithms
-- CS 1331: Introduction to Object-Oriented Programming
-- MATH 1554: Linear Algebra
-- MATH 1712: Calculus
-- ISYE 6739: Probability and Statistics
-
-### Self-Study
-- Harvard CS197: AI Research Experiences
-
-### Books / References
-- *Book of Proof*
-- *Linear Algebra with Applications* (W. Keith Nicholson)
-- *Mathematics for Machine Learning*
-- *An Introduction to Statistical Learning*
-- *The Elements of Statistical Learning*
-- *Artificial Intelligence: A Modern Approach (4th ed.)*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# OMSA
-Master of Science in Analytics at Georgia Tech with the same faculty and curriculum for the online master's as the on-campus program. 
-https://pe.gatech.edu/degrees/analytics 
-
-Given 25 years of experience in the security industry, my goal in the OMSA program is to build a CTO-level understanding of the modern AI stack—how to apply AI/ML/LLMs to real security problems, and how to evaluate and mitigate the security risks introduced by these systems. 
-
-## MS Thesis
-**The Neuro-Symbolic Auditor**
-
-Graph-Augmented Neuro-Symbolic Vulnerability Detection in Linux Kernels
-
-- Have architected and developed a closed-loop security agent by integrating the several projects together (described in detail at a later section)
-  -  Brain (Deep Learning Model) - Provide the Fine-Tuned LLM models (optimized with QLoRA and other techniques)
-  -  Memory/database (Knowledge Management) - Leveraged a Knowledge Graph to solve the "Context" problem. Instead of pasting the whole file, Our system retrieves the dependency graph via RAG (Retrieval Augmented Generation).
-  -  The Translator (Natural Language Processing) - Built the Data Pipeline that cleans unstructured C-code and tokenizes it correctly, handling the specific "dialects" of kernel code.
-  -  The Judge (Reinforcement Learning): Implement the Verification Loop. The LLM proposes a bug, and the Static Analyzer (Coccinelle) rewards/punishes it. This proves you understand Safety & Alignment
-
-## The PhD Extension: "The Autonomous Architect" 
-
-Theme: Evolution & Discovery Goal: Move from "Checking known bugs" to "Discovering unknown bugs" and "Self-Healing."
-
-**Title: Autonomous Evolution of Security Contracts via Adversarial Reinforcement Learning**
-- The Leap beyond MS: From Static to Dynamic (The Mutation Engine): Instead of just training on GitHub history (Past), use an "Attacker Model" to generate new theoretical exploits (Future) and train your Defender against them.
-- From Manual to Automatic (Contract Mining): Instead of hand-writing the "Balance Power" rule, use Unsupervised Learning (NLP) to read 10 years of git logs and infer the rules automatically ("I notice developers always call Y after X... that must be a rule").
-- From Local to Global: Scale the Knowledge Graph from "One Driver" to the "Entire Kernel Ecosystem," tracking dependencies across subsystems.
-
-## Projects
-
-### Deep Learning (DL)
-- Focus: The Engine (The Model itself).
-- Project Title: "Fine-Tuning Large Language Models with QLoRA for Low-Resource Hardware."
-- Goal: Focus on the training dynamics. Experiment with learning rates, rank (r=8 vs r=64), and loss curves.
-- Management Takeaway: leart to estimate compute costs ("How many H100s do we need?") and debug training instability (Loss spikes).
-
-#### Natural Language Processing (NLP)
-- Focus: The Data (The Input/Output).
-- Project Title: "Constructing a Privacy-Aware Chain-of-Thought Dataset from Unstructured Git Logs." Experiment with Tokenization (handling C macros), Prompt Engineering (System Prompts), and Data Augmentation (synthetic samples).
-- Goal: Solve the "Context Window" problem. Compare how different tokenizers handle C code.
-- Management Takeaway: leart that "Data is the moat." You'll understand why your team needs weeks for "Data Cleaning" before they can start training.
-
-### Reinforcement Learning (RL)
-
-- Focus: The Alignment (The Loop).
-- Project Title: "Direct Preference Optimization (DPO) for Aligning LLMs with Static Analysis Verifiers." Used the Static Validator (Coccinelle) as the "Reward Function, and trained the model to prefer the "Verified" trace over the "Hallucinated" trace.
-- Goal: Implement the "Feedback Loop."
-- Management Takeaway: leart about Safety & Alignment. You'll understand how to stop your AI from being "confidently wrong" or generating malware.
-
-### Knowledge Graphs (KG)
-
-- Focus: The Memory (The Context).
-- Project Title: "Modeling Linux Kernel Dependencies as a Neuro-Symbolic Knowledge Graph." Instead of feeding the LLM raw text, you feed it a Graph: (Driver A) --[calls]--> (Function B) --[requires]--> (Lock C). Use a Graph Neural Network (GNN) or RAG (Retrieval Augmented Generation) to retrieve the correct context for the LLM.
-- Goal: Solve the "Hallucination" problem by grounding the AI in a structured graph of kernel APIs.
-- Management Takeaway: learnt about Retrieval Systems (RAG).
-
 ## Classes completed
 https://pe.gatech.edu/degrees/analytics 
 - [ISYE 6501: Intro to Analytics Modeling](https://omscs.gatech.edu/isye-6501-intro-analytics-modeling)
@@ -355,3 +268,9 @@ https://pe.gatech.edu/degrees/analytics
 - [An Introduction to Statistical Learning](https://www.statlearning.com/)
 - [The Elements of Statistical Learning](https://hastie.su.domains/Papers/ESLII.pdf)
 - [Artificial Intelligence: A Modern Approach, 4th US ed.](https://aima.cs.berkeley.edu/)
+
+
+
+
+
+

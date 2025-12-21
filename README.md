@@ -12,12 +12,12 @@ With 25 years of experience in the security industry, my goal in the OMSA progra
 
 ### Working Title
 **Engineering a Controllable AI Stack for Contract-Based Auditing of Linux Kernel Drivers**  
-**Subtitle (optional):** *A Layered Neuro-Symbolic Auditor with Contract DSL, Verifier-Aligned Tuning, and Cross-Version Robustness*  
+**Subtitle (optional):** *A Layered Neuro-Symbolic Auditor with Contract DSL, Verifier-Guided Tuning, and Cross-Version Robustness*  
 **Tagline:** *The Neuro-Symbolic Auditor*
 
 ---
 
-### Positioning (Why this is beyond the “baseline”)
+### Positioning (Why this goes beyond the “baseline”)
 A common foundation in modern security tooling is:
 
 - **LLM = hypothesis generator** (find suspicious logic)
@@ -28,10 +28,10 @@ This thesis deliberately goes **beyond** that foundation.
 **Core idea:** *Treat the AI stack as a controllable engineering system, not a fixed black box.*  
 Rather than “use an LLM and a verifier,” we **engineer a layered stack** that makes LLM-based auditing more:
 
-- **detectable** (contract-first specifications, structured witnesses)
+- **detectable** (contract-first specifications + structured witnesses)
 - **verifiable** (validator-gated outputs and proof obligations)
 - **deployable** (minimal-context retrieval, calibrated abstention, cross-version robustness)
-- **self-improving** (verifier-aligned preference tuning)
+- **self-improving** (verifier-guided tuning driven by validator outcomes)
 
 This turns “LLM + static analysis” into a real-world auditing pipeline that can be deployed and maintained as the kernel evolves.
 
@@ -56,7 +56,7 @@ These issues are difficult to detect reliably because logic spans multiple funct
 - A deterministic validator (Coccinelle/CodeQL) can **confirm / reject / mark inconclusive**, shifting trust away from the model and toward verifiable evidence.
 - We further improve the stack by adding:
   - a minimal **Contract DSL** (specification layer),
-  - **verifier-aligned preference tuning (DPO-lite)** (self-improvement layer),
+  - **verifier-guided tuning (DPO-lite or RAFT)** (self-improvement layer),
   - and **cross-version evaluation** (real-world robustness).
 
 ---
@@ -94,17 +94,19 @@ These issues are difficult to detect reliably because logic spans multiple funct
   - **INCONCLUSIVE** (missing config/macro/callee info, tool limits)
 - This gate is the primary safety mechanism for deployment.
 
-#### Layer 4: Self-Improvement (DPO-lite)
-- Use validator outcomes to form preference pairs:
+#### Layer 4: Self-Improvement via Verifier-Guided Tuning (DPO-lite or RAFT)
+- Use validator outcomes to create an automated improvement loop.
+- **Primary plan:** verifier-aligned **DPO/ORPO** using preference pairs:
   - Preferred: CONFIRMED witnesses and correct abstentions
   - Dispreferred: REJECTED outputs or hallucinated claims
-- Apply a small verifier-aligned DPO/ORPO pass (LoRA/QLoRA) to improve:
-  - witness correctness
-  - evidence localization
-  - calibrated abstention (INCONCLUSIVE quality)
+- **Mitigation / fallback (MS scope):** if DPO is too finicky or computationally expensive, use **RAFT (Rejection Sampling Fine-Tuning)**:
+  - generate multiple candidate witnesses,
+  - keep only validator-confirmed (or high-quality abstention) outputs,
+  - fine-tune the model on those “accepted” examples.
+- Both approaches are framed under one layer: *learning from the validator to improve verifiability and calibration.*
 
+*A controllable, layered AI auditing stack. Contracts define checkable intent; graph-grounded retrieval supplies minimal context; the LLM generates structured witnesses; a validator gate confirms/rejects/marks inconclusive; verifier-guided tuning (DPO-lite or RAFT) uses validator outcomes to improve witness correctness and calibrated abstention. The result is an engineered, deployable system rather than a one-shot “LLM + verifier” pipeline.*
 
-*A controllable, layered AI auditing stack. Contracts define checkable intent; graph-grounded retrieval supplies minimal context; the LLM generates structured witnesses; a validator gate confirms/rejects/marks inconclusive; DPO-lite uses validator outcomes to improve witness correctness and calibrated abstention. The result is an engineered, deployable system rather than a one-shot “LLM + verifier” pipeline.*
 
 ---
 
@@ -120,7 +122,7 @@ To keep the thesis focused and measurable, implement and evaluate **two contract
 ---
 
 ### Cross-Version Evaluation (Lightweight, Real-World Robustness)
-A deployable auditor must work as the kernel evolves. This thesis will include a lightweight cross-version evaluation:
+A deployable auditor must work as the kernel evolves. This thesis includes a lightweight cross-version evaluation:
 
 - Train/tune on one kernel version (or release range)
 - Evaluate on a newer version (or different subsystem snapshot)
@@ -139,10 +141,14 @@ Primary success is not “finding CVEs.” It is producing a controllable pipeli
 - improves confirmed yield (**confirmed / reviewed**)
 - localizes evidence well (near validated site)
 - handles uncertainty honestly (**high-quality INCONCLUSIVE** with explicit missing assumptions)
-- improves over time with **DPO-lite** (rejected ↓, confirmed ↑, abstention calibration ↑)
+- improves over time with verifier-guided tuning (rejected ↓, confirmed ↑, calibration ↑)
 
-**Ablation (semantic gap test):**
-- With vs without identifiers/comments (or renamed identifiers) to measure reliance on semantic cues.
+**Metric additions (usability-focused):**
+- **Abstention Precision:** when the model outputs **INCONCLUSIVE**, how often is it *truly missing information* (macro/config/callee/context limits) versus abstaining unnecessarily?
+- **Abstention Recall (optional):** among cases that *should be* inconclusive under available context, how often does the model correctly abstain?
+
+**Robustness ablation (semantic gap test):**
+- **Robustness against naming variations:** evaluate with identifiers/comments removed or systematically renamed to test whether the model is learning contract logic rather than memorizing superficial naming patterns (e.g., `ret`, `err`, `rc`).
 
 ---
 
@@ -151,7 +157,7 @@ Primary success is not “finding CVEs.” It is producing a controllable pipeli
   - `contracts/` minimal DSL + examples + (optional) validator-rule skeleton generator
   - `pipeline/` (graph retrieval + slice → prompt → witness JSON)
   - `validators/` (Coccinelle/CodeQL harness + labeling)
-  - `training/` (SFT + DPO-lite scripts)
+  - `training/` (SFT + verifier-guided tuning via DPO-lite or RAFT)
   - `eval/` (metrics + ablations + cross-version protocol)
 - Benchmark suite using **public** bug-fix pairs and hard negatives (tricky but safe code), plus optional synthetic mutants filtered by validators.
 - Paper-style write-up suitable for course deliverables and thesis chapters.
@@ -192,7 +198,7 @@ Evolution & discovery: move from “checking known contract families” to **dis
 ### Deep Learning (DL) — The Model (Brain)
 **Project focus:** Fine-tuning LLMs (QLoRA) for structured witness generation  
 - Study training dynamics: learning rate, LoRA rank, stability, loss curves.
-- Evaluate base vs SFT vs SFT + DPO-lite.  
+- Evaluate base vs SFT vs SFT + verifier-guided tuning (DPO-lite or RAFT).  
 **Management takeaway:** estimate compute costs, debug training instability, and make practical cost/quality tradeoffs.
 
 ### Natural Language Processing (NLP) — The Data (Translator)
@@ -203,7 +209,7 @@ Evolution & discovery: move from “checking known contract families” to **dis
 **Management takeaway:** “data is the moat”—data quality dominates outcome.
 
 ### Reinforcement Learning / Alignment (RL) — The Loop
-**Project focus:** Verifier-aligned preference optimization (DPO/ORPO)  
+**Project focus:** Verifier-guided alignment using DPO/ORPO (or RAFT as MS fallback)  
 - Train the model to prefer verified witnesses over hallucinated ones.
 - Measure calibration and abstention quality.  
 **Management takeaway:** safety/alignment in practice—systems that avoid being confidently wrong.

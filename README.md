@@ -215,6 +215,7 @@ Evolution & discovery: move from “checking known contract families” to **dis
 - Optionally explore GNNs or graph-based retrieval heuristics.  
 **Management takeaway:** retrieval systems and grounding strategies for reliable AI products.
 
+---
 
 ## Coursework
 

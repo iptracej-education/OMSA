@@ -8,180 +8,213 @@ Program info: https://pe.gatech.edu/degrees/analytics
 With 25 years of experience in the security industry, my goal in the OMSA program is to build a CTO-level understanding of the modern AI stack—how to apply AI/ML/LLMs to real security problems, and how to evaluate and mitigate the security risks introduced by these systems (hallucination, data leakage, misuse, and model vulnerabilities).
 
 ---
-
 ## MS Thesis
+
 ### Working Title
-**Contract-Guided Neuro-Symbolic Auditing for Linux Kernel Drivers**  
+**Engineering a Controllable AI Stack for Contract-Based Auditing of Linux Kernel Drivers**  
+**Subtitle (optional):** *A Layered Neuro-Symbolic Auditor with Contract DSL, Verifier-Aligned Tuning, and Cross-Version Robustness*  
 **Tagline:** *The Neuro-Symbolic Auditor*
 
+---
+
+### Positioning (Why this is beyond the “baseline”)
+A common foundation in modern security tooling is:
+
+- **LLM = hypothesis generator** (find suspicious logic)
+- **Static analysis = verifier** (confirm/reject)
+
+This thesis deliberately goes **beyond** that foundation.
+
+**Core idea:** *Treat the AI stack as a controllable engineering system, not a fixed black box.*  
+Rather than “use an LLM and a verifier,” we **engineer a layered stack** that makes LLM-based auditing more:
+
+- **detectable** (contract-first specifications, structured witnesses)
+- **verifiable** (validator-gated outputs and proof obligations)
+- **deployable** (minimal-context retrieval, calibrated abstention, cross-version robustness)
+- **self-improving** (verifier-aligned preference tuning)
+
+This turns “LLM + static analysis” into a real-world auditing pipeline that can be deployed and maintained as the kernel evolves.
+
+---
+
 ### Motivation
-Many kernel-driver security issues are not simple “pattern matches.” They often arise from **implicit lifecycle intent gaps** (what developers intended vs. what code actually enforces), such as:
-- resource/lifetime mismanagement (UAF-like risk, double free, leaks),
-- teardown ordering violations (race windows),
-- runtime power management misuse,
-- missing synchronization during removal paths.
+Many kernel-driver security issues are not simple “pattern matches.” They often arise from **implicit lifecycle intent gaps** (what developers intended vs. what code actually enforces), including:
+
+- resource/lifetime mismanagement (UAF-like risk, double free, leaks)
+- teardown ordering violations (race windows)
+- runtime power management misuse
+- missing synchronization during remove/unregister paths
+
+These issues are difficult to detect reliably because logic spans multiple functions/macros/paths, and purely rule-based tools can generate high alert volume without strong prioritization.
+
+---
 
 ### Thesis Hypothesis
-**Explicit “contracts” (resource/ordering/state invariants) provide a stable interface between LLM reasoning and static analysis.**  
-An LLM can generate structured, evidence-grounded **violation witnesses**, and a deterministic static validator can confirm/reject/mark inconclusive—reducing hallucination risk and improving triage efficiency.
+**Explicit “contracts”** (resource/ordering/state invariants) provide a stable interface between stochastic reasoning and deterministic checking.
 
-### System Overview
-I am building a closed-loop “security auditor” by integrating four components:
+- A fine-tuned LLM can act as an **untrusted hypothesis generator**, producing **structured, evidence-grounded violation witnesses** (not free-form claims).
+- A deterministic validator (Coccinelle/CodeQL) can **confirm / reject / mark inconclusive**, shifting trust away from the model and toward verifiable evidence.
+- We further improve the stack by adding:
+  - a minimal **Contract DSL** (specification layer),
+  - **verifier-aligned preference tuning (DPO-lite)** (self-improvement layer),
+  - and **cross-version evaluation** (real-world robustness).
 
-1) **Brain — Deep Learning Model (LLM)**  
-- Fine-tuned LLM that generates *structured hypotheses* rather than general summaries.  
-- Output format is designed to be **checkable**: evidence spans + witness path + assumptions + confidence.
+---
 
-2) **Memory / Grounding — Retrieval & Dependency Context**  
-- Instead of pasting full driver files, the system retrieves the minimal context needed to reason:
-  - dependency/call relationships,
-  - related helper functions,
-  - relevant API usage patterns.  
-- Goal: reduce context waste and improve grounding; retrieval helps but does not eliminate errors by itself.
+### System Overview (Layered, Closed-Loop Security Auditor)
 
-3) **Translator — Data & Tokenization Pipeline for Kernel C “Dialects”**  
-- Builds analysis-ready examples from real kernel code:
-  - stable slicing,
-  - macro-aware preprocessing,
-  - kernel-specific tokenization handling.  
-- Ensures the “witness” output can reliably point back to concrete code spans.
+#### Layer 0: Contract Spec (Minimal DSL)
+- Define contracts as first-class objects using a compact DSL (YAML/JSON) describing:
+  - scope (probe/remove/suspend/resume/ISR)
+  - acquire/release events and obligations
+  - sensitive actions (preconditions)
+  - ordering rules (happens-before constraints)
+  - exceptions
+- **Output:** a contract file + (optionally) a validator-rule skeleton generated from it.
 
-4) **Judge — Validator Gate (Deterministic)**  
-- Static analysis validator (e.g., Coccinelle and/or CodeQL) acts as the judge.  
-- Each LLM hypothesis is labeled:
-  - **CONFIRMED** (high confidence under validator semantics)
+#### Layer 1: Memory / Grounding (Graph + Retrieval)
+- Instead of pasting entire driver files, retrieve **minimal context** needed to evaluate a contract:
+  - dependency/call relationships
+  - related helper functions
+  - relevant API usage patterns
+- Retrieval improves grounding but does not remove errors; it is part of the controlled stack.
+
+#### Layer 2: Brain (LLM)
+- Fine-tuned LLM generates **structured witnesses** rather than summaries.
+- Output is intentionally checkable:
+  - evidence spans (file:function:line ranges)
+  - witness path (call/goto/return sketch)
+  - assumptions + falsifiers
+  - confidence / uncertainty
+
+#### Layer 3: Judge (Validator Gate)
+- Static validator (e.g., Coccinelle and/or CodeQL) adjudicates each hypothesis:
+  - **CONFIRMED** (high confidence *under validator semantics*)
   - **REJECTED**
-  - **INCONCLUSIVE** (missing configuration/macro/callee info, tool limitations)  
-- The gate shifts trust away from free-form LLM reasoning and toward verifiable evidence.
+  - **INCONCLUSIVE** (missing config/macro/callee info, tool limits)
+- This gate is the primary safety mechanism for deployment.
 
-### Small Architecture Diagram
+#### Layer 4: Self-Improvement (DPO-lite)
+- Use validator outcomes to form preference pairs:
+  - Preferred: CONFIRMED witnesses and correct abstentions
+  - Dispreferred: REJECTED outputs or hallucinated claims
+- Apply a small verifier-aligned DPO/ORPO pass (LoRA/QLoRA) to improve:
+  - witness correctness
+  - evidence localization
+  - calibrated abstention (INCONCLUSIVE quality)
 
-```
-             ┌─────────────────────────┐
-             │   Contract Spec (YAML)  │
-             │  (Acquire/Release/...)  │
-             └───────────┬─────────────┘
-                         │
-                         v
 
-┌───────────────┐     ┌───────────────────────┐     ┌──────────────────────────┐
-│  Driver Code  │ --> │  Slicer / Context     │ --> │  LLM (Untrusted Prover)  │
-│ (repo / file) │     │  Extractor (minimal)  │     │  outputs Witness JSON    │
-└───────────────┘     └───────────────────────┘     └───────────┬──────────────┘
-│
-v
-┌──────────────────────────┐
-│ Static Validator         │
-│ (Coccinelle / CodeQL)    │
-│ CONFIRMED/REJECTED/INC   │
-└───────────┬──────────────┘
-│
-(PhD extension: verifier-aligned prefs)│
-v
-┌──────────────────────────┐
-│ Preference Dataset       │
-│ (preferred vs rejected)  │
-└───────────┬──────────────┘
-│
-v
-┌────────────────────────────┐
-│ DPO/ORPO (RLAIF-style)     │
-│ Align LLM to verifiability │
-└────────────────────────────┘
-```
-Contract-guided neuro-symbolic pipeline. The LLM acts as an *untrusted hypothesis generator* producing structured violation witnesses; a static validator adjudicates results (CONFIRMED/REJECTED/INCONCLUSIVE). The PhD extension closes the loop by using validator outcomes to form preference pairs for verifier-aligned DPO/ORPO training, improving witness correctness, localization, and calibrated abstention.
+*A controllable, layered AI auditing stack. Contracts define checkable intent; graph-grounded retrieval supplies minimal context; the LLM generates structured witnesses; a validator gate confirms/rejects/marks inconclusive; DPO-lite uses validator outcomes to improve witness correctness and calibrated abstention. The result is an engineered, deployable system rather than a one-shot “LLM + verifier” pipeline.*
+
+---
 
 ### Contracts in Scope (MS)
-To keep the thesis focused and measurable, I plan to implement and evaluate **two contract families**:
+To keep the thesis focused and measurable, implement and evaluate **two contract families**:
 
-1) **Runtime PM contract** (resource/typestate)  
-- Example: “PM must be active before certain sensitive HW accesses,” and/or “get/put balanced across exits.”
+1) **Runtime PM contract (resource/typestate)**  
+   - Example: “PM must be active before certain sensitive HW accesses,” and/or “get/put balanced across exits.”
 
-2) **Quiesce-before-free contract** (ordering/concurrency)  
-- Example: “disable/synchronize IRQ (or cancel/flush work) before freeing/unregistering shared state.”
+2) **Quiesce-before-free contract (ordering/concurrency)**  
+   - Example: “disable/synchronize IRQ (or cancel/flush work) before freeing/unregistering shared state.”
+
+---
+
+### Cross-Version Evaluation (Lightweight, Real-World Robustness)
+A deployable auditor must work as the kernel evolves. This thesis will include a lightweight cross-version evaluation:
+
+- Train/tune on one kernel version (or release range)
+- Evaluate on a newer version (or different subsystem snapshot)
+- Track causes of INCONCLUSIVE:
+  - macro/config changes
+  - helper refactors / API drift
+  - missing callgraph edges
+- Report how retrieval and contract DSL adjustments reduce inconclusive rates.
+
+---
 
 ### Success Criteria (MS evaluation)
-Primary success is not “finding CVEs.” It is producing a pipeline that:
-- reduces triage burden (alert reduction vs static-only),
-- improves confirmed yield (confirmed / reviewed),
-- localizes evidence well (near validated site),
-- handles uncertainty honestly (high-quality INCONCLUSIVE with explicit missing assumptions).
+Primary success is not “finding CVEs.” It is producing a controllable pipeline that:
+
+- reduces triage burden (**alert reduction vs static-only**)
+- improves confirmed yield (**confirmed / reviewed**)
+- localizes evidence well (near validated site)
+- handles uncertainty honestly (**high-quality INCONCLUSIVE** with explicit missing assumptions)
+- improves over time with **DPO-lite** (rejected ↓, confirmed ↑, abstention calibration ↑)
+
+**Ablation (semantic gap test):**
+- With vs without identifiers/comments (or renamed identifiers) to measure reliance on semantic cues.
+
+---
 
 ### Outputs / Deliverables (MS)
-- A reproducible repository:
-  - `contracts/` schema + examples
-  - `pipeline/` (slice → prompt → witness JSON)
-  - `validators/` (Coccinelle/CodeQL harness)
-  - `eval/` (metrics + ablations)
-- A small benchmark suite using **public** bug-fix pairs and hard negatives (tricky but safe code), plus optional synthetic mutants filtered by validators.
-- A paper-style write-up suitable for course deliverables and thesis chapters.
+- Reproducible repository:
+  - `contracts/` minimal DSL + examples + (optional) validator-rule skeleton generator
+  - `pipeline/` (graph retrieval + slice → prompt → witness JSON)
+  - `validators/` (Coccinelle/CodeQL harness + labeling)
+  - `training/` (SFT + DPO-lite scripts)
+  - `eval/` (metrics + ablations + cross-version protocol)
+- Benchmark suite using **public** bug-fix pairs and hard negatives (tricky but safe code), plus optional synthetic mutants filtered by validators.
+- Paper-style write-up suitable for course deliverables and thesis chapters.
 
 ---
 
 ## PhD Extension (Forward-looking Roadmap)
+
 ### Working Title
 **Autonomous Evolution of Kernel Security Contracts via Contract Mining and Verifier-Aligned Training**  
 **Tagline:** *The Autonomous Architect*
 
 ### Theme
-**Evolution & discovery:** move from “checking known contract families” to **discovering new contract families** and aligning model reasoning to verifiable outputs at scale.
+Evolution & discovery: move from “checking known contract families” to **discovering new contract families** and aligning model reasoning to verifiable outputs at scale.
 
 ### PhD Thesis Hypothesis (extension)
-**Bug-fix commits encode latent intent.** By mining fix commits over long time spans, we can infer and maintain a taxonomy/library of implicit kernel contracts. By using validator outcomes as preference feedback, we can align LLMs to produce **verifier-confirmable witnesses** (or calibrated abstentions), improving generalization and reducing hallucinations.
+**Bug-fix commits encode latent intent.** By mining fix commits over long time spans, we can infer and maintain a taxonomy/library of implicit kernel contracts. By using validator outcomes as preference feedback, we can align LLMs to produce verifier-confirmable witnesses (or calibrated abstentions), improving generalization and reducing hallucinations.
 
 ### Extension Components
 1) **Contract Mining (Spec discovery)**
-- Mine contracts from 10 years of git history using:
-  - fix commit heuristics (Fixes tags, stable backports, subsystem paths),
-  - patch delta features (added/removed calls, reorderings, new guards, unwind changes),
-  - clustering into contract templates.
-- Start with “resource lifecycle & ordering” contracts before expanding.
+- Mine contracts from git history using:
+  - fix commit heuristics (Fixes tags, stable backports, subsystem paths)
+  - patch delta features (added/removed calls, reorderings, new guards, unwind changes)
+  - clustering into contract templates
+- Start with “resource lifecycle & ordering” contract families before expanding.
 
-2) **Verifier-aligned DPO / ORPO (RLAIF-style)**
-- Use validator outcomes to create preference pairs:
-  - Preferred: CONFIRMED witnesses and correct abstentions
-  - Dispreferred: REJECTED or hallucinated claims
-- Train the model to prefer **verifiable** reasoning and to abstain when evidence is insufficient.
+2) **Verifier-aligned DPO / ORPO at scale**
+- Multi-contract, multi-validator alignment
+- Drift-aware preference generation across kernel versions
 
 3) **Safe adversarial stress testing**
-- Generate constrained counterexamples / contract-violation candidates (not weaponized exploit code) to test robustness and improve generalization across variant shapes.
+- Generate constrained counterexamples / contract-violation candidates (**not weaponized exploit code**) to stress-test robustness and improve generalization.
 
 ---
 
 ## Projects mapped to OMSA / course areas
-These projects are intentionally aligned so course work directly advances the thesis pipeline.
 
 ### Deep Learning (DL) — The Model (Brain)
 **Project focus:** Fine-tuning LLMs (QLoRA) for structured witness generation  
-- Study training dynamics: learning rate, LoRA rank, stability, loss curves.  
-- Evaluate base vs SFT vs (optional) SFT + preference training.
-
-**Management takeaway:** estimation of compute needs, diagnosing instability, and understanding realistic tradeoffs (cost vs quality).
+- Study training dynamics: learning rate, LoRA rank, stability, loss curves.
+- Evaluate base vs SFT vs SFT + DPO-lite.  
+**Management takeaway:** estimate compute costs, debug training instability, and make practical cost/quality tradeoffs.
 
 ### Natural Language Processing (NLP) — The Data (Translator)
 **Project focus:** Kernel-aware dataset construction and tokenization  
-- Build contract-conditioned prompts.  
-- Investigate tokenization issues (macros, conditional compilation).  
-- Data augmentation via safe synthetic mutants + validator filtering.
-
+- Build contract-conditioned prompts.
+- Investigate tokenization issues (macros, conditional compilation).
+- Data augmentation via safe synthetic mutants + validator filtering.  
 **Management takeaway:** “data is the moat”—data quality dominates outcome.
 
 ### Reinforcement Learning / Alignment (RL) — The Loop
-**Project focus:** DPO/ORPO alignment using verifier preference signals  
-- Train the model to prefer verified witnesses over hallucinated ones.  
-- Measure calibration and abstention quality.
-
+**Project focus:** Verifier-aligned preference optimization (DPO/ORPO)  
+- Train the model to prefer verified witnesses over hallucinated ones.
+- Measure calibration and abstention quality.  
 **Management takeaway:** safety/alignment in practice—systems that avoid being confidently wrong.
 
 ### Knowledge Graphs / Networks (KG) — The Memory (Grounding)
 **Project focus:** Modeling kernel dependencies for retrieval grounding  
-- Represent dependencies (call/require/guard relationships).  
-- Use retrieval to provide minimal context slices.  
-- Optionally explore GNNs or graph-based retrieval heuristics.
-
+- Represent dependencies (call/require/guard relationships).
+- Use retrieval to provide minimal context slices.
+- Optionally explore GNNs or graph-based retrieval heuristics.  
 **Management takeaway:** retrieval systems and grounding strategies for reliable AI products.
 
----
 
 ## Coursework
 

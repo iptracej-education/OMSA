@@ -219,24 +219,6 @@ Evolution & discovery: move from “checking known contract families” to **dis
 ## Coursework
 
 ### Completed
-- ISYE 6501: Intro to Analytics Modeling
-- CSE 6040: Computing for Data Analysis
-- ISYE 6420: Bayesian Statistics
-- CSE 6242: Data and Visual Analytics
-- CS 6601: Artificial Intelligence
-
-### Planned
-- ISYE 6740: Computational Data Analytics
-- CS 7643: Deep Learning
-- CS 6742: Reinforcement Learning
-- CSE 8803: Applied Natural Language Processing
-- CS 7280: Network Science (Graph)
-
----
-
-## Prerequisites and Foundations
-
-## Classes completed
 https://pe.gatech.edu/degrees/analytics 
 - [ISYE 6501: Intro to Analytics Modeling](https://omscs.gatech.edu/isye-6501-intro-analytics-modeling)
 - [CSE 6040: Computing for Data Analysis](https://cse6040.gatech.edu/active/)
@@ -244,7 +226,7 @@ https://pe.gatech.edu/degrees/analytics
 - [CSE 6242: Data and Visual Analytics](https://omscs.gatech.edu/cse-6242-data-and-visual-analytics)
 - [CS 6601: Artifical Intelligence](https://omscs.gatech.edu/cs-6601-artificial-intelligence)
   
-## Classes planned
+### Planned
 - [ISYE 6740 Computational Data Analytics](https://www2.isye.gatech.edu/~yxie77/ISyE6740-2025Spring-Xie-Syllabus)
 - [CS 7643: Deep Learning](https://omscs.gatech.edu/cs-7643-deep-learning) 
 - [CS 6742: Reinforcement Learning](https://omscs.gatech.edu/cs-7642-reinforcement-learning) 

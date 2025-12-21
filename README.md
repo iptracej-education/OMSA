@@ -7,6 +7,8 @@ Program info: https://pe.gatech.edu/degrees/analytics
 
 With 25 years of experience in the security industry, my goal in the OMSA program is to build a CTO-level understanding of the modern AI stack—how to apply AI/ML/LLMs to real security problems, and how to evaluate and mitigate the security risks introduced by these systems (hallucination, data leakage, misuse, and model vulnerabilities).
 
+**How this maps to my thesis:** I treat the “AI stack” as a controllable engineering system (specification → context → model → verification → learning), not a fixed black box. The thesis applies a layered, neuro-symbolic approach—contracts as specifications, graph-grounded retrieval for context, validator-gated outputs for safety, and verifier-guided tuning (DPO-lite or RAFT) for continuous improvement—so that LLM-based security analysis becomes *verifiable, deployable, and maintainable* in the real world.
+
 ---
 ## MS Thesis
 
